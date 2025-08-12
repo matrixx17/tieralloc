@@ -7,13 +7,13 @@
 
 namespace {
 
-using clock_t = std::chrono::steady_clock;
+using steady_clock_t = std::chrono::steady_clock;
 
 struct Bucket {
     double rate_Bps{0.0};
     double capacity_bytes{0.0};
     double tokens{0.0};
-    clock_t::time_point last;
+    steady_clock_t::time_point last;
     long base_latency_ns{0};
     std::mutex mtx;
 };
@@ -30,7 +30,7 @@ void init_bucket(ta_tier_t t, double bw_Bps, long base_lat_ns) {
     b.rate_Bps = bw_Bps;
     b.capacity_bytes = std::max(1.0, bw_Bps * 0.010); // ~10ms burst
     b.tokens = b.capacity_bytes;
-    b.last = clock_t::now();
+    b.last = steady_clock_t::now();
     b.base_latency_ns = base_lat_ns;
 }
 
@@ -46,8 +46,8 @@ extern "C" long ta_charge_bytes(ta_tier_t tier, unsigned long long bytes, ta_cha
     auto& b = g_buckets[static_cast<size_t>(tier)];
     std::scoped_lock lk(b.mtx);
 
-    const auto now   = clock_t::now();
-    const double dt  = std::chrono::duration<double>(now - b.last).count();
+    const auto now = steady_clock_t::now();
+    const double dt = std::chrono::duration<double>(now - b.last).count();
     b.last = now;
 
     b.tokens = std::min(b.capacity_bytes, b.tokens + b.rate_Bps * dt);
