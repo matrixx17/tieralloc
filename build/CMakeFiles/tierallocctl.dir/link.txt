@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/tierallocctl.dir/link.d CMakeFiles/tierallocctl.dir/tools/tierallocctl.cc.o -o tierallocctl  -Wl,-rpath,/home/vedantajain/tieralloc/build libtieralloc.so

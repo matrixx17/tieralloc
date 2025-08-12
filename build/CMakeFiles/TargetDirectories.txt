@@ -1,0 +1,6 @@
+/home/vedantajain/tieralloc/build/CMakeFiles/tieralloc.dir
+/home/vedantajain/tieralloc/build/CMakeFiles/tierallocctl.dir
+/home/vedantajain/tieralloc/build/CMakeFiles/bench_alloc.dir
+/home/vedantajain/tieralloc/build/CMakeFiles/bench_roll.dir
+/home/vedantajain/tieralloc/build/CMakeFiles/edit_cache.dir
+/home/vedantajain/tieralloc/build/CMakeFiles/rebuild_cache.dir

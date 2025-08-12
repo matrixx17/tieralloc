@@ -7,12 +7,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-add_compile_options(-Wall -Wextra -Wpendantic)
+add_compile_options(-Wall -Wextra -Wpedantic -Wno-unused-parameter)
 
-add library(tieralloc SHARED
-	src/allocator.cc
-	src/throttle.cc
-	src/stats.cc
+add_library(tieralloc SHARED
+    src/allocator.cc
+    src/throttle.cc
+    src/stats.cc
+    src/interpose.cc
+    src/policy.cc
 )
 
 target_include_directories(tieralloc PUBLIC ${CMAKE_SOURCE_DIR}/include)
@@ -22,3 +24,9 @@ target_link_libraries(tieralloc PRIVATE Threads::Threads dl)
 
 add_executable(tierallocctl tools/tierallocctl.cc)
 target_link_libraries(tierallocctl PRIVATE tieralloc)
+
+add_executable(bench_alloc benchmark/bench_alloc.cc)
+target_link_libraries(bench_alloc PRIVATE tieralloc)
+
+add_executable(bench_roll benchmark/bench_roll.cc)
+target_link_libraries(bench_roll PRIVATE tieralloc)

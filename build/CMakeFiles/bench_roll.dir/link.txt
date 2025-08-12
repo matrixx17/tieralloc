@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/bench_roll.dir/link.d CMakeFiles/bench_roll.dir/benchmark/bench_roll.cc.o -o bench_roll  -Wl,-rpath,/home/vedantajain/tieralloc/build libtieralloc.so

@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/bench_alloc.dir/link.d CMakeFiles/bench_alloc.dir/benchmark/bench_alloc.cc.o -o bench_alloc  -Wl,-rpath,/home/vedantajain/tieralloc/build libtieralloc.so

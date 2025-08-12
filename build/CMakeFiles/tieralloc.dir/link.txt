@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -Wl,--dependency-file=CMakeFiles/tieralloc.dir/link.d -shared -Wl,-soname,libtieralloc.so -o libtieralloc.so CMakeFiles/tieralloc.dir/src/allocator.cc.o CMakeFiles/tieralloc.dir/src/throttle.cc.o CMakeFiles/tieralloc.dir/src/stats.cc.o CMakeFiles/tieralloc.dir/src/interpose.cc.o CMakeFiles/tieralloc.dir/src/policy.cc.o  -ldl
