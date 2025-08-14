@@ -17,9 +17,9 @@ struct Counters {
 };
 
 Counters g_ctr;
-std::mutex g_cfg_mtx; // placeholder if we add dynamic cfg later
+std::mutex g_cfg_mtx;
 
-} // namespace
+} 
 
 extern "C" void ta_get_stats(ta_stats_snapshot_t* out) {
     if (!out) return;
@@ -39,8 +39,8 @@ extern "C" int ta_stats_json(char* buf, unsigned long long n) {
 
     std::ostringstream oss;
     oss << "{";
-    auto arr = [&](const char* key, const unsigned long long a[3]){
-        oss << "\\\"" << key << "\\\":[ " << a[0] << ", " << a[1] << ", " << a[2] << " ],";
+    auto arr = [&](const char* key, const unsigned long long a[3]){ 
+        oss << "\"" << key << "\":[ " << a[0] << ", " << a[1] << ", " << a[2] << " ],";
     };
     arr("alloc_calls", s.alloc_calls);
     arr("free_calls", s.free_calls);
@@ -48,6 +48,7 @@ extern "C" int ta_stats_json(char* buf, unsigned long long n) {
     arr("bytes_total_alloc", s.bytes_total_alloc);
     arr("bytes_total_freed", s.bytes_total_freed);
     arr("simulated_wait_ns", s.simulated_wait_ns);
+
     std::string json = oss.str();
     if (!json.empty() && json.back()==',') json.back() = '}';
     else json.push_back('}');
@@ -56,11 +57,11 @@ extern "C" int ta_stats_json(char* buf, unsigned long long n) {
     unsigned long long m = (unsigned long long)json.size();
     unsigned long long c = (m < n-1) ? m : (n-1);
     std::memcpy(buf, json.data(), c);
-    buf[c] = '\\0';
-    return (int)m; // return full length needed
+    buf[c] = '\0';
+    return (int)m;
 }
 
-// -- Internal helpers used by allocator/interposer --
+// Helpers
 extern "C" void __ta_add_alloc(ta_tier_t t, unsigned long long sz, long wait_ns) {
     g_ctr.alloc_calls[(int)t]++;
     g_ctr.bytes_current[(int)t] += sz;

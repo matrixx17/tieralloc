@@ -112,7 +112,7 @@ extern "C" void* ta_move(void* p, ta_tier_t dst_tier) {
     if (!q) return nullptr;
 
     // Copy + free old
-    std::memcpy(q, p, (size_t)rec.size);
+    memcpy(q, p, (size_t)rec.size);
     ta_free(p);
     return q;
 }

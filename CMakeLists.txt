@@ -22,6 +22,12 @@ target_include_directories(tieralloc PUBLIC ${CMAKE_SOURCE_DIR}/include)
 find_package(Threads REQUIRED)
 target_link_libraries(tieralloc PRIVATE Threads::Threads dl)
 
+find_library(LIBNUMA numa)
+if(LIBNUMA)
+  target_link_libraries(tieralloc PRIVATE ${LIBNUMA})
+  target_compile_definitions(tieralloc PRIVATE TA_HAVE_NUMA=1)
+endif()
+
 add_executable(tierallocctl tools/tierallocctl.cc)
 target_link_libraries(tierallocctl PRIVATE tieralloc)
 
