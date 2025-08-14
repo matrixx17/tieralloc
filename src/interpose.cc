@@ -26,6 +26,8 @@ static void  (*real_free)(void*) = NULL;
 static void* (*real_calloc)(size_t,size_t) = NULL;
 static void* (*real_realloc)(void*,size_t) = NULL;
 
+extern "C" int __ta_internal_get_size(const void* p, unsigned long long* out_size);
+
 static void resolve_libc(void) {
     if (!real_malloc) real_malloc = (void*(*)(size_t)) dlsym(RTLD_NEXT, "malloc");
     if (!real_free)   real_free   = (void (*)(void*)) dlsym(RTLD_NEXT, "free");
@@ -60,23 +62,32 @@ extern "C" void* calloc(size_t a, size_t b) {
     if (p && n >= TA_MIN_ROUTE) memset(p, 0, n);
     return p;
 }
-
+ 
 extern "C" void* realloc(void* p, size_t n) {
-    resolve_libc();
-    if (!g_interpose || g_disabled || g_in_hook) return real_realloc(p,n);
-    if (!p) return malloc(n);
-    if (n==0) { free(p); return NULL; }
-    
-    ta_tier_t t;
-    if (ta_tier_of(p, &t) == 0) {
-        void* q = ta_alloc(n, TA_HINT_DEFAULT);
-        if (!q) return NULL;
-        // copy min(old,new)
-        ta_free(p);
-        return q;
-    } else {
-        // fallback 
-        return real_realloc(p,n);
+  resolve_libc();
+  if (!g_interpose || g_disabled || g_in_hook) return real_realloc(p, n);
+  if (!p) return malloc(n);
+  if (n == 0) {
+    free(p);
+    return NULL;
+  }
+
+  ta_tier_t t;
+  if (ta_tier_of(p, &t) == 0) {
+    void* q = ta_alloc(n, TA_HINT_DEFAULT);
+    if (!p) return NULL;
+
+    unsigned long long old_sz = 0;
+    size_t copy_n = 0;
+    if (__ta_internal_get_size(p, &old_sz) == 0) {
+      copy_n = (size_t)((old_sz < (unsigned long long)n) ? old_sz : (unsigned long long)n);
     }
+    if (copy_n > 0) memcpy(q, p, copy_n);
+
+    ta_free(p);
+    return q;
+  } else {
+    return real_realloc(p, n);
+  }
 }
 

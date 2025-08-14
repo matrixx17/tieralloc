@@ -25,7 +25,7 @@ target_link_libraries(tieralloc PRIVATE Threads::Threads dl)
 find_library(LIBNUMA numa)
 if(LIBNUMA)
   target_link_libraries(tieralloc PRIVATE ${LIBNUMA})
-  target_compile_definitions(tieralloc PRIVATE TA_HAVE_NUMA=1)
+  target_compile_definitions(tieralloc PRIVATE TA_HAVE_LIBNUMA=1 TA_HAVE_NUMA=1)
 endif()
 
 add_executable(tierallocctl tools/tierallocctl.cc)

@@ -30,6 +30,15 @@ inline unsigned long long round_up_pages(unsigned long long n) {
 
 } 
 
+extern "C" int __ta_internal_get_size(const void* p, unsigned long long* out_size) {
+  if (!p || !out_size) return -1;
+  std::scoped_lock lk(g_map_mtx);
+  auto it = g_map.find(const_cast<void*>(p));
+  if (it == g_map.end()) return -2;
+  *out_size = it->second.size;
+  return 0;
+}
+
 extern "C" void ta_init_from_env(void) {
     
     ta_set_default_config();

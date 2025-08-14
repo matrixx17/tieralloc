@@ -2,7 +2,7 @@
 #include "numa_probe.h"
 #include "tieralloc.h"
 
-#include <stdlib>
+#include <cstdlib>
 #include <cstring>
 #include <algorithm>
 
@@ -11,7 +11,7 @@ extern "C" void __ta_set_node_mapping(int fast, int normal, int slow);
 extern "C" void __ta_set_node_count(int count);
 
 static ta_numa_info& state() {
-  static ta_numa_info& s;
+  static ta_numa_info s;
   return s;
 }
 
