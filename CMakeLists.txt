@@ -36,3 +36,5 @@ target_link_libraries(bench_alloc PRIVATE tieralloc)
 
 add_executable(bench_roll benchmark/bench_roll.cc)
 target_link_libraries(bench_roll PRIVATE tieralloc)
+
+add_subdirectory(pytorch_shim)
